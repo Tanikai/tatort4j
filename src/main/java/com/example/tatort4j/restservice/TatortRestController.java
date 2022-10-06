@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-public class TatortRestController {
+@RequestMapping("/tatort")
+    public class TatortRestController {
 
     private final ITatortProvider tatortProvider;
 
@@ -25,4 +26,5 @@ public class TatortRestController {
         List<TatortBroadcast> schedule = tatortProvider.getTatortSchedule();
         return schedule;
     }
+
 }
