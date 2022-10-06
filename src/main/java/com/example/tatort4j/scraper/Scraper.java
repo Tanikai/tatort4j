@@ -76,10 +76,8 @@ public class Scraper {
 
         for (var linkElement : tatortList) {
             var broadcast = parseRow(linkElement.text(), requestTimestamp, schedule);
-            broadcast.url = linkElement.attr("href");
-            if (!broadcast.url.startsWith("https://www.daserste.de")) {
-                broadcast.url = "https://www.daserste.de" + broadcast.url;
-            }
+            broadcast.setUrl(linkElement.attr("href"));
+
             broadcastList.add(broadcast);
         }
 
@@ -115,14 +113,15 @@ public class Scraper {
 
         if (schedule == ScheduleType.ERSTE) {
             tb = parseTitle(columns[2]);
+            tb.setChannel("Erste");
         } else if (schedule == ScheduleType.DRITTE) {
             tb = parseTitle(columns[3]);
-            tb.channel = columns[2];
+            tb.setChannel(columns[2]);
         } else {
             throw new IllegalArgumentException();
         }
         var time = parseDatetime(columns[0], columns[1], requestTimestamp);
-        tb.time = time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
+        tb.setTime(time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX")));
 
         return tb;
     }
@@ -165,15 +164,15 @@ public class Scraper {
 
         int cityBegin = titleText.lastIndexOf('(') + 1;
         int cityEnd = titleText.indexOf(')', cityBegin);
-        partial.city = titleText.substring(cityBegin, cityEnd).trim();
+        partial.setCity(titleText.substring(cityBegin, cityEnd).trim());
 
         // Parse Inspectors
         String titleNoCity = titleText.substring(0, cityBegin - 1);
         int inspectorBegin = titleNoCity.lastIndexOf('(') + 1;
-        partial.inspectors = titleNoCity.substring(inspectorBegin).trim();
+        partial.setInspectors(titleNoCity.substring(inspectorBegin).trim());
 
         // Parse Title
-        partial.title = titleText.substring(0, inspectorBegin - 2).trim();
+        partial.setTitle(titleText.substring(0, inspectorBegin - 2).trim());
         return partial;
     }
 

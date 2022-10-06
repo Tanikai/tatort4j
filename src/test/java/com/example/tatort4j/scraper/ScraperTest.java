@@ -21,12 +21,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ScraperTest {
 
-    @Test
+    /*@Test
     void parseCurrentWebsite() {
         final Scraper s = new Scraper();
         var broadcasts = s.ParseTatortWebsite();
         assertEquals(5, (long) broadcasts.size());
-    }
+    }*/
 
     @Test
     void parseTatortWebsite() {
@@ -45,12 +45,12 @@ class ScraperTest {
         var b = Scraper.parseRow(row,
                 ZonedDateTime.parse(requestTime, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX")),
                 channel);
-        assertEquals(expTitle, b.title);
-        assertEquals(expCity, b.city);
-        assertEquals(expInspectors, b.inspectors);
-        assertEquals(expTime, b.time);
+        assertEquals(expTitle, b.getTitle());
+        assertEquals(expCity, b.getCity());
+        assertEquals(expInspectors, b.getInspectors());
+        assertEquals(expTime, b.getTime());
         if (!expChannel.equals("Erste")) {
-            assertEquals(expChannel, b.channel);
+            assertEquals(expChannel, b.getChannel());
         }
     }
 
@@ -68,9 +68,9 @@ class ScraperTest {
     @CsvFileSource(resources = "/scraper/title_test.csv", numLinesToSkip = 1, delimiter = ';')
     void parseTitle(String input, String title, String inspectors, String city) {
         var t = Scraper.parseTitle(input);
-        assertEquals(title, t.title);
-        assertEquals(inspectors, t.inspectors);
-        assertEquals(city, t.city);
+        assertEquals(title, t.getTitle());
+        assertEquals(inspectors, t.getInspectors());
+        assertEquals(city, t.getCity());
     }
 
     @ParameterizedTest
